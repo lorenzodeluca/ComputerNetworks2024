@@ -1,0 +1,32 @@
+Università degli Studi di Padova
+Dipartimento di Ingengeria Informatica
+Esame di Reti di Calcolatori - 24 Febbraio 2024
+Prof. ing. Nicola Zingirian
+Si modifichi il programma che implementa il Web Server in modo che invii un
+entity body utilizzando il transfer coding chuncked, come descritto dalla
+grammatica riportata nella sezione 3.6.1 della RFC 2616, evitando tutte le
+parti opzionali.
+Chunked-Body = *chunk
+last-chunk
+trailer
+CRLF
+chunk = chunk-size [ chunk-extension ] CRLF
+chunk-data CRLF
+chunk-size = 1*HEX
+last-chunk = 1*("0") [ chunk-extension ] CRLF
+chunk-extension= *( ";" chunk-ext-name [ "=" chunk-ext-val ] )
+chunk-ext-name = token
+chunk-ext-val = token | quoted-string
+chunk-data = chunk-size(OCTET)
+trailer = *(entity-header CRLF)
+Per evitare interferenze si utilizzi come numero di porta riportato nel file
+port.txt
+Si verifichi che il browser scarichi correttamente tutto l’entity body.
+Scrivere (come /*commento */ all'inizio del file esame.c) una breve relazione
+su:
+- Funzionalità puntuali da aggiungere
+- Punti di intervento neĺ programma
+- Eventuali scelte implementative
+- Descrizione dell'esperimento
+- Descrizione dell'esito e verifica correttezza
+PER RITIRARSI SCRIVERE IN CIMA AL FILE IL COMMENTO /* RITIRATO */
