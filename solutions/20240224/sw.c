@@ -8,6 +8,7 @@
 #include <string.h>
 #include <unistd.h>
 
+#define CHUNKED_SIZE 20
 
 char hbuf[10000];
 char entity[1000];
@@ -28,7 +29,7 @@ int main(){
 	int s,t,s2,len; 
 	int yes=1;
 	char * commandline;
-	int i,j;
+	int i,j,a,c;
 	s = socket(AF_INET, SOCK_STREAM, 0);
 	if ( s == -1) {
 		perror("Socket fallita");
@@ -64,7 +65,7 @@ int main(){
 			perror("Accept fallita");
 			return 1;
 		}
-		commandline = h[0].n=hbuf;
+		commandline = h[0].n=hbuf; //hbuf = request
 		for(j=0,i=0; read(s2,hbuf+i,1);i++){
 				if((hbuf[i]==':' ) && (h[j].v == NULL)){
 						h[j].v=&hbuf[i+1];
@@ -90,18 +91,50 @@ int main(){
 
 		fin = fopen(filename+1,"rt");
 		if (fin == NULL){
-			sprintf(response,"HTTP/1.1 404 NOT FOUND\r\nConnection:close\r\n\r\n<html><h1>File %s non trovato</h1>i</html>",filename);
+			sprintf(response,"HTTP/1.1 404 NOT FOUND\r\nConnection:close\r\n\r\n<html><h1>File %s non trovato</h1></html>",filename);
 			write(s2,response,strlen(response));
 			close(s2);
 			exit(1);
-		}
-		sprintf(response,"HTTP/1.1 200 OK\r\nConnection:close\r\n\r\n");
-		write(s2,response,strlen(response));
-		while (!feof(fin)){
-			fread(entity,1,1000,fin);
-			write(s2,entity,1000);
-		}
-		fclose(fin);
+		} else {
+       // buffer of CHUNKED_SIZE size
+       char buffer[CHUNKED_SIZE];
+
+       // telling the client that the data will be sent chunked
+       sprintf(response,"HTTP/1.1 200 OK\r\nTransfer-Encoding: chunked\r\n\r\n");
+       write(s2, response, strlen(response));
+       do {
+               // Inizializzo la variabile a al valore 0
+               a = 0;
+               // Se a < della dimensione del buffer e il carattere preso dal
+               // file non è EOF
+               while((a < CHUNKED_SIZE) && (c = fgetc(fin)) != EOF)
+                       // adding a char to  the buffer and after incrementing a
+                       buffer[a++] = c;
+               // adding to the response the value of a in hexadecimal
+               sprintf(response,"%X\r\n",a);
+               // sending the response to the client
+               write(s2, response, strlen(response));
+               // sending the chunk to the client
+               write(s2, buffer, a);
+               // adding to the response response \r\n
+               sprintf(response,"\r\n");
+               // sending to the client
+               write(s2, response, strlen(response));
+
+       }while(!feof(fin));  //continue till eof
+
+       // close the file
+       fclose(fin);
+       // add to the response end values \0\r\n
+       sprintf(response,"%X\r\n",0);
+       // send to client
+       write(s2, response, strlen(response));
+       // adding connection end \r\n
+       sprintf(response,"\r\n");
+       // Invialo al client
+       write(s2, response, strlen(response));
+     }
+
 		close(s2);
 		exit(-1);
 	}
