@@ -12,6 +12,8 @@ Login using your SSH credentials.
 
     scp -O ./.vimrc MATRICOLA@SERVER_IP:/home/MATRICOLA/.vimrc 
 
+vim how to format code in cmd  mode(keystroke): gg=G
+Explanation: gg goes to the top of the file, = is a command to fix the indentation and G tells it to perform the operation to the end of the file.
 
 ## Content of .vimrc
 This .vimrc config file allows you to:
@@ -167,7 +169,7 @@ In questa repo sono contenuti i programmi sviluppati dal professore durante il c
   * Supporta il `Transfer-Encoding: chunked`
 * Server web
   * Invio di file statici nella cartella del server
-  * `Autorization` richiesta nella cartella `secure` tramite basic HTTP auth í ½í´— [RFC2617](https://datatracker.ietf.org/doc/html/rfc2617)
+  * `Autorization` richiesta nella cartella `secure` tramite basic HTTP auth ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ [RFC2617](https://datatracker.ietf.org/doc/html/rfc2617)
   * Invio tramite `Transfer-Encoding: chunked`
 * Proxy web
   * ModalitÃ  `GET` in chiaro
@@ -179,10 +181,10 @@ In questa repo sono contenuti i programmi sviluppati dal professore durante il c
 
 ## Standard di riferimento (Standards)
 
-* RFC1945 **HTTP 1.0** í ½í´— [rfc-editor.org](https://www.rfc-editor.org/rfc/rfc1945)
-* RFC2616 **HTTP 1.1** í ½í´— [rfc-editor.org](https://www.rfc-editor.org/rfc/rfc2616)
-* RFC3875 **Common Gateway Interface (CGI)** í ½í´— [rfc-editor.org](https://www.rfc-editor.org/rfc/rfc3875.html)
-* RFC6265 **Cookies** í ½í´— [rfc-editor.org](https://www.rfc-editor.org/rfc/rfc6265)
-* RFC6455 **WebSocket** í ½í´— [rfc-editor.org](https://www.rfc-editor.org/rfc/rfc6455.html)
+* RFC1945 **HTTP 1.0** ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ [rfc-editor.org](https://www.rfc-editor.org/rfc/rfc1945)
+* RFC2616 **HTTP 1.1** ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ [rfc-editor.org](https://www.rfc-editor.org/rfc/rfc2616)
+* RFC3875 **Common Gateway Interface (CGI)** ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ [rfc-editor.org](https://www.rfc-editor.org/rfc/rfc3875.html)
+* RFC6265 **Cookies** ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ [rfc-editor.org](https://www.rfc-editor.org/rfc/rfc6265)
+* RFC6455 **WebSocket** ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ [rfc-editor.org](https://www.rfc-editor.org/rfc/rfc6455.html)
 
 
