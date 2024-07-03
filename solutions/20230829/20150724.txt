@@ -1,0 +1,25 @@
+Università degli Studi di Padova -Dipartimento di Ingegneria Informatica
+Esame di Reti di Calcolatori - 24 Luglio 2015
+Prof. ing. Nicola Zingirian
+Si modifichi il programma Client in modo che incorpon un meccanismo di caching delle risorse scaricate, facendo riferimento ai seguenti punti
+1) Si utilizzi l'header Last-Modified dell' HTTP/1.0, documentato alla sezione 10.10 della RFC 1945.
+2) Ad ogni risorsa scaricata si associ un file
+a) il cui nome corrisponde all'URL della risorsa (nel quale il carattere "/" viene sostituito dal carattere "_")
+b) il cui contenuto è composto da
+1)
+ii)
+una prima riga contenente la data di download della risorsa (espressa nel modo più conveniente)
+il contenuto della risorsa (entity body)
+c) la cui cartella di salvataggio è ./cache/, figlia del working directory del programma proxy- wel
+3) Per la gestione della data
+a) si faccia riferimento al formato http-date (cfr. RFC 1945, Sezione 3.3)
+b) si utilizzino le funzioni, documentate nel manuale UNIX nelle apposite sezioni riportate tra parentesi
+1)
+ii)
+iii)
+time (2) per ottenere la data espressa in secondi a partire dal 1/1/1970 (detta "Epoch" o "Unix time") nel tipo int rinominato time r
+localtime (3) per scomporre la data espressa in "epoch" nelle sue componenti (ora, minuti, etc.) riportate ciascuna in un campo della struttura struct tm e viceversa mktime (3) per effettuare l'operazione inversa. opzionalmente utilizzare strftime (3) per formattare (analogamente alla printf) le componenti della data presenti nei campi della struct tm in una stringa e strptime (3) per effettuare (similmente alla scanf) l'operazione
+inversa.
+4) Si proceda come segue:
+a) si scriva sul retro del presente foglio il diagramma di flusso o il pseudo-codice corrispondente alla logica che si intende utilizzare per implementare la cache sul client b) si modifichi il programma
+c) si utilizzi per le prove il sito web www.example.com
