@@ -1,0 +1,33 @@
+
+Università degli Studi di Padova - Dipartimento di Ingegneria dell'Informazione
+-
+Esame di Reti di Calcolatori 29 Agosto 2023
+Prof. ing. Nicola Zingirian
+A. COMPITO DA SVOLGERE
+Il sorgente C
+server
+<matricola>.c presente nella vostra home è il
+programma
+HTTP 1.1 sviluppato a lezione. Si richiede di apportare le seguenti modifiche
+editando quel sorgente senza spostarlo o copiarlo in altre cartelle o host.
+B. MODIFICHE DA APPORTARE
+Si modifichi il programma in modo tale che sia in grado di gestire il meccani-
+smo di controllo del caching basato sull'ETag descritto nella RFC2616,
+succes-
+sivo a quelli studiati a lezione.
+Al posto di utilizzare la data per stabilire se una risorsa è modificata, il
+server associa un identificativo che viene comunicato al client tramite l'hea-
+der "ETag" che riassume il contenuto del file e che rimane invariato se e solo
+se il contenuto della risorsa non varia.
+Si provi con un browser l'accesso ripetuto ad una pagina prova.html. Il
+server
+sviluppato si dovrà comportare correttamente a seconda che il file prova.html
+sia stato modificato o meno tra una richiesta e l'altra del client, utilizzan-
+do un criterio, anche
+modifiche del
+rudimentale e imperfetto, che rilevi le
+contenuto. Tale criterio non dev'essere il controllo della data del file stes-
+So.
+Si vari il server per il minimo indispensabile per soddisfare le richieste del
+browser e per verificare, su schermo, se il browser gestisce la cache come ci
+si aspetta.
