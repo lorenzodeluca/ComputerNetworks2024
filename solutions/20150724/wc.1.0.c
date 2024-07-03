@@ -1,12 +1,14 @@
 #include <unistd.h>
 #include <arpa/inet.h>
 #include<stdio.h>
+#include <stdlib.h>
 #include <sys/socket.h>
 #include <errno.h>
 #include <string.h>
 #include <netdb.h>
 #include <malloc.h>
 #include <sys/stat.h>   // stat to check if file exist
+#include <time.h>
 struct hostent * he; 
 
 char hbuf[10000];
@@ -98,12 +100,11 @@ int main() {
    printf("\ncache: %s",cachePath);
    struct stat buffer;
 
-   //read response
-for(i=0; t = read(s,response+i,1999999-i);i+=t);
-   //printf("t=%d\n",t); 
+
 
    if(stat(cachePath, &buffer) != 0){
-      // Apriamo il file in modalità di scrittura. Se il file non esiste, sarà creato.
+      printf("\n\n---new url not cached---\n\n");
+      // Apriamo il file in modalità di scrittura. Se il file sarà creato.
       FILE *file = fopen(cachePath, "w");
 
       // Controlliamo che il file sia stato aperto correttamente
@@ -115,18 +116,99 @@ for(i=0; t = read(s,response+i,1999999-i);i+=t);
       // Scriviamo il contenuto della variabile timestamp nel file
       fprintf(file, "%s\n", h[lastModifiedIndex].v);
 
+      //read response
+      for(i=0; t = read(s,response+i,1999999-i);i+=t);
+      //printf("t=%d\n",t); 
+
       // Scriviamo il contenuto della variabile str nel file
       fprintf(file, "%s", response);
 
       // Chiudiamo il file
       fclose(file);
+   }else{ // file esiste già
+      printf("\n\n--- url cached--\n\n");
+
+      //ottengo la lastModified nella prima riga del file
+      char firstLine[256];              // Buffer per la prima riga
+
+
+
+      char *cachedVersion = NULL;       // Variabile per il resto del file
+      FILE *file = fopen(cachePath, "r");
+      if (file == NULL) {
+         perror("Errore nell'apertura del file");
+         return 1;
+      }
+
+      // Leggere la prima riga
+      if (fgets(firstLine, sizeof(firstLine), file) == NULL) {
+         perror("Errore nella lettura del file");
+         fclose(file);
+         return 1;
+      }
+
+      // Rimuovere l'eventuale carattere di fine riga
+      firstLine[strcspn(firstLine, "\r\n")] = '\0';
+
+      // Calcolare la lunghezza del resto del file
+      fseek(file, 0, SEEK_END);   
+      long fileSize = ftell(file);   
+      fseek(file, strlen(firstLine) + 1, SEEK_SET); // Spostarsi dopo la prima riga
+
+      // Leggere il resto del file
+      long cachedSize = fileSize - (strlen(firstLine) + 1);
+      cachedVersion = (char *)malloc(cachedSize + 1); // +1 per il terminatore NULL
+
+
+
+
+      if (cachedVersion == NULL) {
+         perror("Errore nell'allocazione della memoria");
+         fclose(file);
+         return 1;
+      }
+
+
+      fread(cachedVersion, 1, cachedSize, file);
+      cachedVersion[cachedSize] = '\0'; // Aggiungere il terminatore NULL
+
+
+      fclose(file);
+
+      // Stampa la data/ora letta dal file (per verifica) 
+      //printf("Data/ora letta dal file: %s\n", firstLine);
+      // Definire una struttura tm per la conversione
+      struct tm tm;
+      struct tm tm2;
+
+      memset(&tm, 0, sizeof(struct tm));
+      memset(&tm2, 0, sizeof(struct tm)); 
+      // Convertire la stringa della data in una struttura tm
+      strptime(firstLine, "%a, %d %b %Y %H:%M:%S %Z", &tm);
+      if(lastModifiedIndex!=-1)strptime(h[lastModifiedIndex].v, "%a, %d %b %Y %H:%M:%S %Z", &tm2);
+
+
+      // CONvertire la struttura tm in un timestamp
+      time_t timestampCache = mktime(&tm);
+      time_t timestampNew = mktime(&tm2);
+
+      if(lastModifiedIndex==-1 || sizeof(firstLine) < 15|| timestampNew>timestampCache){ //date=Mon, 03 Aug 2024 21:58:30 GMT
+         printf("\n\n---NOT USING CACHED VERSION---\n\n");
+         //read response from http call
+         for(i=0; t = read(s,response+i,1999999-i);i+=t);
+         //printf("t=%d\n",t); 
+
+      }else{ //use cached
+         printf("\n\n---using cached VERSIONNNNN---\n\n");
+         sprintf(response,"%s",cachedVersion);
+      }
    }
 
 
-   
+
 
    response[i]=0;
-   printf("\n---REPONSE----\n%s",response);
+   printf("\n---RESPONSE----\n%s",response);
 
    //printf("\n\ni=%d\n",i);
 
