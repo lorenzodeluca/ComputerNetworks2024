@@ -1,0 +1,73 @@
+
+Università degli Studi di Padova - Dipartimento di Ingegneria dell'Informazione
+               Esame di Reti di Calcolatori - 21 Luglio 2023
+
+                     Prof. ing. Nicola Zingirian
+
+
+
+A. COMPITO DA  SVOLGERE
+=======================
+Il sorgente C  <matricola>.c presente nella vostra  home è il  programma proxy 
+HTTP 1.1 sviluppato a lezione. Si richiede di apportare le seguenti  modifiche
+editando quel sorgente senza spostarlo o copiarlo in altre cartelle o host.
+
+B. MODIFICHE DA APPORTARE
+==========================
+
+1. Il programma deve  essere messo in grado di gestire automaticamente l’ecce-
+zione corrispondente allo Status-Code 301 o 302, nel caso in cui il server web
+indichi tali codici. 
+
+
+2. Nel caso di  ricezione  dello Status-Code 302,  il proxy web non invierà al
+client alcuna  parte della  http-response, ma effettuerà subito ed automatica-
+mente una nuova  richiesta  secondo  quanto specificato nella RFC1945 nel caso
+in esame. Il client  riceverà dunque  direttamente la http-response corrispon-
+dente alla  seconda richiesta, se validata  dallo Status-Code 200, e non dovrà
+così gestire alcuna eccezione.
+
+3 Provare il programma collegandosi al server http://assaporaparma.it 
+
+C. AVVERTENZE
+=============
+
+   ATTENZIONE:il port da utilizzare nel proxy  e’ indicato nel file port.txt.
+   ---------------------------------------------------------------------------
+
+ 1.Non è necessario che il programma legga il file port.txt direttamente ma è 
+   importante  utilizzare solo  quel port per  non  entrare in conflitto  con  
+   i programmi di altri colleghi.
+
+ 2.Utilizzare il browser Mozilla Firefox,  aprire il menù -> preferenze (pre-
+   ferences) cercare "Proxy" nella barra di  ricerca del menù e impostare ma-
+   nualmente i proxy HTTP e HTTPS  all'indirizzo 88.80.187.84 del vostro pro-
+   xy indicandone il port specifico. 
+   
+
+D. DOCUMENTAZIONE
+================= 
+Aprire il sito web https://datatracker.ietf.org/doc/html/rfc1945#section-9.3
+riportante la RFC1945.
+E' possibile  consultare il manuale "man" e gli appunti cartacei o su tablet
+in modalità aereo ma nessuna risorsa in rete.
+
+E. PRIMA DI CONSEGNARE: 
+=======================
+Scrivere (come /*commento*/ all'inizio del file <matricola>.c) una breve re-
+lazione su
+
+   - Funzionalità puntuali aggiunte, i  punti  di  intervento neĺ programma, 
+eventuali scelte implementative, descrizione dell’esecuzione e verifica cor-
+rettezza.
+
+oppure
+
+    - /*RITIRATO*/, nel caso in cui si decida di ritirarsi 
+
+F. COME CONSEGNARE:
+===================
+ 
+LASCIARE IL FILE <matricola>.c modificato nella home in cui lo si è trovato.
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
