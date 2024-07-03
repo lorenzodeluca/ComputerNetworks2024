@@ -22,8 +22,8 @@ int main() {
    char response[4000000];
    struct sockaddr_in server;
    unsigned char * p;
-   char * cacheDir="./cache/";
- char ip_str[INET_ADDRSTRLEN]; 
+   char * cacheDir="cache/";
+   char ip_str[INET_ADDRSTRLEN]; 
    char * filename="/index.html"; 
    char * hostname="google.it";
    s = socket(AF_INET, SOCK_STREAM, 0 );
@@ -46,10 +46,10 @@ int main() {
    p[3]=(unsigned char) he->h_addr[3]; 
    //p[0]=142;p[1]=251;p[2]=40; p[3]=227; // 142.250.187.196  
    //p[0]=127;p[1]=0;p[2]=0; p[3]=1; // 142.250.187.196  
-   
-   
-    inet_ntop(AF_INET, &(server.sin_addr), ip_str, INET_ADDRSTRLEN); //convert ip inside server to str 
-    printf("Indirizzo IP: %s\n", ip_str);
+
+
+   inet_ntop(AF_INET, &(server.sin_addr), ip_str, INET_ADDRSTRLEN); //convert ip inside server to str 
+   printf("Indirizzo IP: %s\n", ip_str);
 
    t = connect(s,(struct sockaddr *) &server, sizeof(struct sockaddr_in));
    if ( t == -1) {
@@ -80,7 +80,7 @@ int main() {
 
    for(i=0;i<j;i++)
       printf("%s ----> %s\n",h[i].n,h[i].v);
-   
+
 
    //caching 
    int len = snprintf(NULL, 0, "%s%s", hostname, filename);
@@ -91,18 +91,43 @@ int main() {
    sprintf(cachename,"%s",url);
    for(int i=0;cachename[i]!=0;i++)if(cachename[i]=='/')cachename[i]='_';
    printf("\nfilename ----> %s", cachename);
+
+   int fileLen=snprintf(NULL, 0, "%s%s", cacheDir, filename);
+   char *cachePath = malloc(len + 1); // +1 per il carattere nullo terminatore
+   sprintf(cachePath,"%s%s\0",cacheDir,cachename); 
+   printf("\ncache: %s",cachePath);
    struct stat buffer;
-   if(stat(cachename, &buffer) == 0){
-      
+
+   //read response
+for(i=0; t = read(s,response+i,1999999-i);i+=t);
+   //printf("t=%d\n",t); 
+
+   if(stat(cachePath, &buffer) != 0){
+      // Apriamo il file in modalità di scrittura. Se il file non esiste, sarà creato.
+      FILE *file = fopen(cachePath, "w");
+
+      // Controlliamo che il file sia stato aperto correttamente
+      if (file == NULL) {
+         printf("Errore nell'apertura del file.\n");
+         return 1;
+      }
+
+      // Scriviamo il contenuto della variabile timestamp nel file
+      fprintf(file, "%s\n", h[lastModifiedIndex].v);
+
+      // Scriviamo il contenuto della variabile str nel file
+      fprintf(file, "%s", response);
+
+      // Chiudiamo il file
+      fclose(file);
    }
 
 
-   for(i=0; t = read(s,response+i,1999999-i);i+=t);
-   //printf("t=%d\n",t); 
+   
 
    response[i]=0;
    printf("\n---REPONSE----\n%s",response);
 
-      //printf("\n\ni=%d\n",i);
+   //printf("\n\ni=%d\n",i);
 
 }
