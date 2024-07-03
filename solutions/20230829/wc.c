@@ -27,7 +27,7 @@ int main() {
    char * cacheDir="cache/";
    char ip_str[INET_ADDRSTRLEN]; 
    char * filename="/index.html"; 
-   char * hostname="google.it";
+   char * hostname="google.com";
    s = socket(AF_INET, SOCK_STREAM, 0 );
    if ( s == -1 ) {
       printf("Errno = %d (%d)\n",errno,EAFNOSUPPORT);
@@ -59,12 +59,12 @@ int main() {
       perror("Connect fallita");
       return 1;
    }
-    
+
    char * request;
    int reqLen=snprintf(NULL, 0, "GET %s HTTP/1.1\r\nHost:%s\r\n\r\n",filename,hostname);
    request=malloc(reqLen + 1);
    sprintf(request,"GET %s HTTP/1.1\r\nHost:%s\r\n\r\n",filename,hostname);
-   printf("\nporcodiaz\n");
+
    printf("request ---> %s",request);
    write(s,request,strlen(request));
    //sleep(2);
@@ -85,6 +85,10 @@ int main() {
             ETagIndex=j;
          }
       }
+
+   }
+   for(i=0;i<j;i++){
+      printf("%s ----> %s\n",h[i].n,h[i].v);
       if(!strcmp(h[i].n,"Content-Length")){
          len = atoi(h[i].v);
          printf("len = %d\n", len);
@@ -93,9 +97,6 @@ int main() {
    if (len == 0)
       len = 10000;
 
-
-   for(i=0;t=read(s,response+i,len-i);i+=t);
-   printf("%s ----> %s\n",h[i].n,h[i].v);
 
 
    //caching 
@@ -114,7 +115,7 @@ int main() {
    printf("\ncache: %s",cachePath);
    struct stat buffer;
 
-
+ printf("\nporcodiaz\n");
 
    if(stat(cachePath, &buffer) != 0){
       printf("\n\n---new url not cached---\n\n");
