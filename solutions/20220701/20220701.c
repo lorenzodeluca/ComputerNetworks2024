@@ -34,7 +34,7 @@ int main() {
    }
 
    srvaddr.sin_family = AF_INET;
-   srvaddr.sin_port = htons(8077);
+   srvaddr.sin_port = htons(25565);
    srvaddr.sin_addr.s_addr = 0;
 
    t = bind(s, (struct sockaddr *)&srvaddr, sizeof(struct sockaddr_in));
@@ -50,6 +50,9 @@ int main() {
    }
 
    len = sizeof(struct sockaddr);
+   int socket=1;
+   int transaction_counter = 0;
+
    while (1) {
       s2 = accept(s, (struct sockaddr *)&remote, &len);
       if (s2 == -1) {
@@ -57,6 +60,7 @@ int main() {
          return 1;
       }
       if (fork() == 0) {
+         //handle request
          close(s);
          FILE *fin;
          char *method, *filename, *ver;
@@ -64,11 +68,11 @@ int main() {
          char response[3001];
          char *commandline;
          int i, j;
-
+         
          while (1) {
             bzero(hbuf, sizeof(hbuf));
             bzero(h, sizeof(h));
-
+            transaction_counter++; 
             commandline = h[0].n = hbuf;
             for (j = 0, i = 0; read(s2, hbuf + i, 1); i++) {
                if ((hbuf[i] == ':') && (h[j].v == NULL)) {
@@ -87,7 +91,7 @@ int main() {
             }
 
             for (i = 0; i < j; i++) {
-               printf("%s ----> %s\n", h[i].n, h[i].v);
+               //printf("%s ----> %s\n", h[i].n, h[i].v);
             }
 
             method = commandline;
@@ -97,7 +101,11 @@ int main() {
             ver = commandline + i;
             for (; commandline[i] != 0; i++) {} commandline[i] = 0; i = i + 1;
 
-            printf("Method = %s, URI = %s, VER = %s \n", method, filename, ver);
+            //printf("Method = %s, URI = %s, VER = %s \n", method, filename, ver);
+            
+            
+            // Print the requested file and transaction counter
+            printf("%s Socket %d trans %d\n", filename, socket, transaction_counter);
 
             fin = fopen(filename + 1, "rt");
             if (fin == NULL) {
@@ -114,13 +122,18 @@ int main() {
                   write(s2, entity, bytesRead);
                }
             }
+            // Increment the transaction counter after each request
             fclose(fin);
+            shutdown(s2, SHUT_WR);
+            //close(s2);
          }
 
 
          close(s2);
          exit(0);
       } else {
+         socket++;
+         transaction_counter=0;
          close(s2);
       }
    }
