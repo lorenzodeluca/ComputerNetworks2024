@@ -1,0 +1,32 @@
+
+
+
+ A. COMPITO DA SVOLGERE:
+ Il sorgente C <<matricola>.c presente nella vostra home è il programma client 17 HTTP 1.1 sviluppato a lezione. Si richiede di apportare le seguenti modifiche 18 editando quel sorgente senza spostarlo o copiarlo in altre cartelle o host.
+
+ B. MODIFICHE DA APPORTARE
+=====
+ 1. Il sito cui il client si collega, anzichè essere indicato come indirizzo IP 23 in una costante nel sorgente, dev'essere specificabile come un URL dall'utente 24 come parametro in linea nella chiamata da línea di comando:
+
+./<nome eseguibile> http://www.xxxx.yy/zzzz
+
+ 2. Qualora ad un nome di host corrisponda più di un indirizzo IPV4, allora il 29 client deve scegliere uno dei molteplici indirizzi IP restituiti dalla funzio- 30 ne gethostbyname (3).
+ La scelta dell'indirizzo deve rispondere ad un principio di casualità utiliz- 32 zando le funzioni srand (3) e rand (3) per selezionare a caso uno degli indi- 33 rizzi utilizzato per instaurare la connessione.
+
+ 3 Provare il programma collegandosi al server http://tinypic.com/index.html
+
+ C. AVVERTENZE
+ ============
+
+ATTENZIONE: il port da utilizzare nel client e' indicato nel file port.txt. Non è necessario che il programma legga il file port.txt direttamente ma è importante utilizzare solo quel port peri non entrare in conflitto con i programmi di altri colleghi.
+
+
+ D. DOCUMENTAZIONE
+===
+ Consultare il manuale per gethostbyname (3), srand (3) e rand (3) ed eventuali 47 programmi in /RDC23.
+
+
+ E. PRIMA DI CONSEGNARE:
+ Scrivere (come /*commento*/ all'inizio del file <matricola>.c) una breve re- 53 lazione su
+
+ - Funzionalità puntuali da aggiungere, punti di intervento nel programma, 56 eventuali scelte implementative, descrizione dell'esecuzione e verifica cor- 57 rettezza.
